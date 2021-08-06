@@ -1,0 +1,183 @@
+{
+    "name": "Adventure Game",
+    "steps" : [
+        {
+            "type": "decision",
+            "name": "start",
+            "text": "You are a cat and you are in a bedroom in a house that you don't belong in.  The grown-ups see you.  You can't run out of the door becuase it is close and there isn't a cat flap.  What are you going to do?",
+            "opts": [
+                {
+                    "text": "Run and hide in the closet.",
+                    "goto": "closet"
+                },
+                {
+                    "text": "Run and hide under the bed",
+                    "goto": "bed"
+                }
+            ]
+        },{
+            "type": "decision",
+            "name": "closet",
+            "text": "You run into the closet but you only get 10 seconds of peace before the grown up finds you.",
+            "opts": [
+                {
+                    "text": "Run under the bed",
+                    "goto": "bed"
+                },
+                {
+                    "text": "Growl at the grown-up and try to scare them",
+                    "goto": "growl"
+                },
+                {
+                    "text": "Look at cute and furry and try to get them to stroke you.",
+                    "goto": "cute"
+                }
+            ]
+        },{
+            "type": "decision",
+            "name": "cute",
+            "text": "The grown-ups bend down and stroke you.  You purr and rub against them as they scratch your back.  You decide to...",
+            "opts": [
+                {
+                    "text": "Scratch them and be sick on their shoes.",
+                    "goto": "sick"
+                },
+                {
+                    "text": "Try to get them to buy you food by giving them your big bambi eyes.",
+                    "goto": "bambi"
+                }
+            ]
+        },{
+            "type": "decision",
+            "name": "bed",
+            "text": "While you are under the bed hiding you find a slip of paper with a code on it: 51 63 142 62 45.  You wonder what it means, but then the grown up is trying to reach your tail and pull you out!",
+            "opts": [
+                {
+                    "text": "Scratch them and be sick on their shoes.",
+                    "goto": "sick"
+                },
+                {
+                    "text": "Accept defeat and see what happens.",
+                    "goto": "defeat"
+                }
+            ],
+            "aquire" : "code"
+        },{
+            "type": "decision",
+            "name": "sick",
+            "text": "The grownup looks down at their shoes and gets angry.  They shout at you.  At this moment you see the window is open and run out of it.  As you fly through the air you look for a suitable landing spot.",
+            "opts": [
+                {
+                    "text": "On the trampolene.",
+                    "goto": "trampolene"
+                },
+                {
+                    "text": "On the grass.",
+                    "goto": "grass"
+                }
+            ]
+        },{
+            "type": "decision",
+            "name": "bambi",
+            "text": "The grown up picks you up and you pretend to be hungry by doing your best \"Simon's cat\" impression.  They say they want to feed you but they don't have any cat food.  You purr lots until they go to the shop.  They put you down, get their keys and leave you in the house.  You decide to explore.",
+            "opts": [
+                {
+                    "text": "Explore under the bed.",
+                    "goto": "bed"
+                },
+                {
+                    "text": "Explore the upstairs rooms",
+                    "goto": "upstairs"
+                }
+            ]
+        },{
+            "type": "decision",
+            "name": "trampolene",
+            "text": "On the trampolene you find a key and wonder what it would open, but you don't think you should go back in the house.  Perhaps it opens something in the garden.",
+            "opts": [
+                {
+                    "text": "Go to the garage",
+                    "goto": "garage"
+                },
+                {
+                    "text": "Explore the garden",
+                    "goto": "garden"
+                }
+            ],
+            "aquire": "key"
+        },{
+            "type": "forwarder",
+            "name": "growl",
+            "text": "They get angry and pick you up and put you outside the back door.",
+            "goto": "grass"
+        },{
+            "type": "decision",
+            "name": "garden",
+            "text": "As you expore the garden you find a secret door in the fence that has a lock on it.",
+            "opts": [
+                {
+                    "condition": "key",
+                    "text": "Open the door with the key you found on the trampolene",
+                    "goto": "fence"
+                },
+                {
+                    "text": "You can see a trampole which you could go and jump on.",
+                    "goto": "trampolene"
+                }
+            ]
+        },{
+            "type": "forwarder",
+            "name": "grass",
+            "text": "You land prefectly on the grass and decide to explore the garden.",
+            "goto": "garden"
+        },{
+            "type": "forwarder",
+            "name": "defeat",
+            "text": "The grown up doesn't seem angry.  So you decide to try and win them over by being cute",
+            "goto": "cute"
+        },{
+            "type": "decision",
+            "name": "fence",
+            "text": "You're ",
+            "opts": [
+                {
+                    "text": "",
+                    "goto": ""
+                },
+                {
+                    "text": "",
+                    "goto": ""
+                }
+            ]
+        },{
+            "type": "decision",
+            "name": "",
+            "text": "",
+            "opts": [
+                {
+                    "text": "",
+                    "goto": ""
+                },
+                {
+                    "text": "",
+                    "goto": ""
+                }
+            ]
+        },{
+            "type": "decision",
+            "name": "",
+            "text": "",
+            "opts": [
+                {
+                    "text": "",
+                    "goto": ""
+                },
+                {
+                    "text": "",
+                    "goto": ""
+                }
+            ]
+        }
+
+    ]
+}
