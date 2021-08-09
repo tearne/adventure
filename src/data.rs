@@ -1,4 +1,4 @@
-use std::{borrow::Cow, collections::HashMap};
+use std::{collections::HashMap};
 
 use serde::{Serialize, Deserialize};
 
@@ -9,9 +9,9 @@ pub struct Game {
     pub steps: Vec<Step>,
 }
 impl Game {
-    pub fn to_map(self) -> HashMap<Cow<'static, str>, Step> {
+    pub fn to_map(self) -> HashMap<String, Step> {
         self.steps.into_iter().map(|s|{
-            (s.name().into(), s)
+            (s.name(), s)
         }).collect()
     }
 }

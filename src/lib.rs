@@ -1,4 +1,5 @@
 mod data;
+mod app;
 
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
@@ -25,8 +26,12 @@ macro_rules! log {
 pub async fn start(canvas_id: String) {
     log!("Hello, world!");
 
-    let t = load().await.to_map();
-    log!("{:?}", t["start"]);
+    let data = load().await.to_map();
+
+    let app = app::TemplateApp::new(data);
+    eframe::start_web(&canvas_id, Box::new(app)).unwrap();
+
+    // log!("{:?}", data["start"]);
 }
 
 async fn load() -> Game {

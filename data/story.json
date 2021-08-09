@@ -2,8 +2,8 @@
     "name": "Adventure Game",
     "steps" : [
         {
-            "type": "decision",
             "name": "start",
+            "type": "decision",
             "text": "You are a cat and you are in a bedroom in a house that you don't belong in.  The grown-ups see you.  You can't run out of the door becuase it is close and there isn't a cat flap.  What are you going to do?",
             "opts": [
                 {
@@ -16,8 +16,8 @@
                 }
             ]
         },{
-            "type": "decision",
             "name": "closet",
+            "type": "decision",
             "text": "You run into the closet but you only get 10 seconds of peace before the grown up finds you.",
             "opts": [
                 {
@@ -34,13 +34,13 @@
                 }
             ]
         },{
-            "type": "decision",
             "name": "cute",
+            "type": "decision",
             "text": "The grown-ups bend down and stroke you.  You purr and rub against them as they scratch your back.  You decide to...",
             "opts": [
                 {
                     "text": "Scratch them and be sick on their shoes.",
-                    "goto": "sick"
+                    "goto": "si ck"
                 },
                 {
                     "text": "Try to get them to buy you food by giving them your big bambi eyes.",
@@ -48,8 +48,8 @@
                 }
             ]
         },{
-            "type": "decision",
             "name": "bed",
+            "type": "decision",
             "text": "While you are under the bed hiding you find a slip of paper with a code on it: 51 63 142 62 45.  You wonder what it means, but then the grown up is trying to reach your tail and pull you out!",
             "opts": [
                 {
@@ -63,8 +63,8 @@
             ],
             "aquire" : "code"
         },{
-            "type": "decision",
             "name": "sick",
+            "type": "decision",
             "text": "The grownup looks down at their shoes and gets angry.  They shout at you.  At this moment you see the window is open and run out of it.  As you fly through the air you look for a suitable landing spot.",
             "opts": [
                 {
@@ -77,13 +77,13 @@
                 }
             ]
         },{
-            "type": "decision",
             "name": "bambi",
-            "text": "The grown up picks you up and you pretend to be hungry by doing your best \"Simon's cat\" impression.  They say they want to feed you but they don't have any cat food.  You purr lots until they go to the shop.  They put you down, get their keys and leave you in the house.  You decide to explore.",
+            "type": "decision",
+            "text": "The grown up picks you up and you pretend to be hungry by doing your  best \"Simon's cat\" impression.  They say they want to feed you but they don't have any cat food.  You purr lots until they decide to go to the shop.  They put you down, get their keys and leave you in the house.  You decide to explore.",
             "opts": [
                 {
                     "text": "Explore under the bed.",
-                    "goto": "bed"
+                    "goto": "bed explore"
                 },
                 {
                     "text": "Explore the upstairs rooms",
@@ -91,8 +91,14 @@
                 }
             ]
         },{
-            "type": "decision",
+            "name": "bed explore",
+            "type": "forwarder",
+            "text": "While you are under the bed exploring you find a slip of paper with a code on it: 51 63 142 62 45.  You wonder what it means, then go to explore the upstairs rooms",
+            "goto": "upstairs",
+            "aquire" : "code"
+        },{
             "name": "trampolene",
+            "type": "decision",
             "text": "On the trampolene you find a key and wonder what it would open, but you don't think you should go back in the house.  Perhaps it opens something in the garden.",
             "opts": [
                 {
@@ -106,17 +112,17 @@
             ],
             "aquire": "key"
         },{
-            "type": "forwarder",
             "name": "growl",
+            "type": "forwarder",
             "text": "They get angry and pick you up and put you outside the back door.",
-            "goto": "grass"
+            "goto": "garden"
         },{
-            "type": "decision",
             "name": "garden",
+            "type": "decision",
             "text": "As you expore the garden you find a secret door in the fence that has a lock on it.",
             "opts": [
                 {
-                    "condition": "key",
+                    "use": "key",
                     "text": "Open the door with the key you found on the trampolene",
                     "goto": "fence"
                 },
@@ -126,19 +132,48 @@
                 }
             ]
         },{
-            "type": "forwarder",
             "name": "grass",
+            "type": "forwarder",
             "text": "You land prefectly on the grass and decide to explore the garden.",
             "goto": "garden"
         },{
-            "type": "forwarder",
             "name": "defeat",
+            "type": "forwarder",
             "text": "The grown up doesn't seem angry.  So you decide to try and win them over by being cute",
             "goto": "cute"
         },{
-            "type": "decision",
             "name": "fence",
-            "text": "You're ",
+            "type": "decision",
+            "text": "You open the fence door and you find a blue glowing pad with a three cat faces on it and a diagram of trees and a house.",
+            "opts": [
+                {
+                    "text": "You stand on the pad with your paw.",
+                    "goto": "start chaper 2"
+                },
+                {
+                    "text": "It looks a bit scary, so you run out and into the garage.",
+                    "goto": "garage"
+                }
+            ]
+        },{
+            "name": "upstairs",
+            "type": "decision",
+            "text": "You go into another upstairs room and find a secret chest.  It has a keypad on it.",
+            "opts": [
+                {
+                    "use": "code",
+                    "text": "You type the code 51 63 142 62 45 on the keypad",
+                    "goto": "powerup box"
+                },
+                {
+                    "text": "You press some keys randomly, the box buzzes and shoots out some fireworks which scare you and you run out the window.",
+                    "goto": "grass"
+                }
+            ]
+        },{
+            "name": "powerup box",
+            "type": "decision",
+            "text": "Thee box opnens and you find a powerup",
             "opts": [
                 {
                     "text": "",
@@ -150,22 +185,8 @@
                 }
             ]
         },{
+            "name": "garage",
             "type": "decision",
-            "name": "",
-            "text": "",
-            "opts": [
-                {
-                    "text": "",
-                    "goto": ""
-                },
-                {
-                    "text": "",
-                    "goto": ""
-                }
-            ]
-        },{
-            "type": "decision",
-            "name": "",
             "text": "",
             "opts": [
                 {
