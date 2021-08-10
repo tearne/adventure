@@ -32,27 +32,24 @@ impl RawData {
             data.insert(name, step);
         };
 
-        fn ensure_links_resolvable(name: &String, data: &mut HashMap<String, Step>, warnings: &mut Vec<String>){
-            if !data.contains_key(name) {
-                let todo_step = Step::T(Todo{name: name.clone()});
-                data.insert(name.clone(), todo_step);
-                warnings.push(format!("Missing stage {}.  Todo inserted in its place.", name));
-            } else {
-                match &mut data[name] {
-                    Step::D(d) => {
-                        for opt in d.opts.iter() {
-                            ensure_links_resolvable(&opt.goto, data, warnings);
-                        }
-                    },
-                    Step::F(f) => {
-                        ensure_links_resolvable(&f.goto, data, warnings);
-                    }
-                    _ => ()
-                }
-                
+        //TODO yukky!
+        let all_keys = data.values().flat_map(|v| match v {
+            Step::D(d) => {
+                let t = d.opts.iter().map(|o|o.goto.clone()).collect::<Vec<_>>();
+                t
+            },
+            Step::F(f) => vec![f.goto.clone()],
+            _ => Vec::new(),
+        }).collect::<Vec<_>>();
+        
+        
+        for key in all_keys {
+            if !data.contains_key(&key) {
+                warnings.push(format!("Missing stage {}.  Todo inserted in its place.", key));
+                let todo_step = Step::T(Todo{name: key.clone()});
+                data.insert(key, todo_step);   
             }
         }
-
 
         Game {
             title: self.title,

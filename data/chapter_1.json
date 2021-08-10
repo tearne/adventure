@@ -42,7 +42,7 @@
             "opts": [
                 {
                     "text": "Scratch them and be sick on their shoes.",
-                    "goto": "si ck"
+                    "goto": "sick"
                 },
                 {
                     "text": "Try to get them to buy you food by giving them your big bambi eyes.",
@@ -174,12 +174,12 @@
             ]
         },{
             "name": "powerup box",
-            "type": "todo",
-            "text": "Thee box opnens and you find a powerup",
+            "type": "decision",
+            "text": "The box opnens and you find a set of wings",
             "opts": [
                 {
-                    "text": "",
-                    "goto": ""
+                    "text": "fly in to the garden",
+                    "goto": "garden"
                 },
                 {
                     "text": "",

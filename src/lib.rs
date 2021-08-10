@@ -26,9 +26,10 @@ macro_rules! log {
 pub async fn start(canvas_id: String) {
     log!("Hello, world!");
 
-    let data = load().await;
+    let game_data = load().await;
+    log!("You have {} warnings", game_data.warnings.len());
 
-    let app = app::TemplateApp::new(data);
+    let app = app::TemplateApp::new(game_data);
     eframe::start_web(&canvas_id, Box::new(app)).unwrap();
 
     // log!("{:?}", data["start"]);
