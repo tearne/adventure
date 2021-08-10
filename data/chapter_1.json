@@ -1,5 +1,7 @@
 {
-    "name": "Adventure Game",
+    "title": "Adventure Game",
+    "author": "Rowan and Anna",
+    "start_step": "start",
     "steps" : [
         {
             "name": "start",
@@ -148,7 +150,7 @@
             "opts": [
                 {
                     "text": "You stand on the pad with your paw.",
-                    "goto": "start chaper 2"
+                    "goto": "chaper 2"
                 },
                 {
                     "text": "It looks a bit scary, so you run out and into the garage.",
@@ -172,7 +174,7 @@
             ]
         },{
             "name": "powerup box",
-            "type": "decision",
+            "type": "todo",
             "text": "Thee box opnens and you find a powerup",
             "opts": [
                 {
@@ -186,7 +188,7 @@
             ]
         },{
             "name": "garage",
-            "type": "decision",
+            "type": "todo",
             "text": "",
             "opts": [
                 {

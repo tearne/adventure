@@ -26,7 +26,7 @@ macro_rules! log {
 pub async fn start(canvas_id: String) {
     log!("Hello, world!");
 
-    let data = load().await.to_map();
+    let data = load().await;
 
     let app = app::TemplateApp::new(data);
     eframe::start_web(&canvas_id, Box::new(app)).unwrap();
@@ -39,7 +39,7 @@ async fn load() -> Game {
     opts.method("GET");
     opts.mode(RequestMode::SameOrigin);
 
-    let url = "data/story.json";
+    let url = "data/chapter_1.json";
 
     let request = Request::new_with_str_and_init(&url, &opts).unwrap();
 
@@ -51,5 +51,7 @@ async fn load() -> Game {
 
     let json = JsFuture::from(resp.json().unwrap()).await.expect("a");
 
-    json.into_serde::<Game>().unwrap()
+    json.into_serde::<RawData>()
+        .unwrap()
+        .to_game()
 }
