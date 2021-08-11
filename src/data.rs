@@ -1,9 +1,8 @@
-use std::{collections::HashMap};
+use std::collections::HashMap;
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
-
-pub struct Game{
+pub struct Game {
     pub title: String,
     pub author: String,
     pub data: HashMap<String, Step>,
@@ -15,11 +14,11 @@ pub struct Game{
 pub struct RawData {
     pub title: String,
     pub author: String,
-    pub start_step: String, 
+    pub start_step: String,
     pub steps: Vec<Step>,
 }
 impl RawData {
-    pub fn to_game(mut self) -> Game {
+    pub fn to_game(self) -> Game {
         let mut data = HashMap::new();
         let mut warnings = Vec::new();
 
@@ -30,24 +29,29 @@ impl RawData {
                 break;
             }
             data.insert(name, step);
-        };
+        }
 
         //TODO yukky!
-        let all_keys = data.values().flat_map(|v| match v {
-            Step::D(d) => {
-                let t = d.opts.iter().map(|o|o.goto.clone()).collect::<Vec<_>>();
-                t
-            },
-            Step::F(f) => vec![f.goto.clone()],
-            _ => Vec::new(),
-        }).collect::<Vec<_>>();
-        
-        
+        let all_keys = data
+            .values()
+            .flat_map(|v| match v {
+                Step::D(d) => {
+                    let t = d.opts.iter().map(|o| o.goto.clone()).collect::<Vec<_>>();
+                    t
+                }
+                Step::F(f) => vec![f.goto.clone()],
+                _ => Vec::new(),
+            })
+            .collect::<Vec<_>>();
+
         for key in all_keys {
             if !data.contains_key(&key) {
-                warnings.push(format!("Missing stage {}.  Todo inserted in its place.", key));
-                let todo_step = Step::T(Todo{name: key.clone()});
-                data.insert(key, todo_step);   
+                warnings.push(format!(
+                    "Missing stage \"{}\".  Todo inserted in its place.",
+                    key
+                ));
+                let todo_step = Step::T(Todo { name: key.clone() });
+                data.insert(key, todo_step);
             }
         }
 
@@ -71,7 +75,7 @@ pub enum Step {
     #[serde(rename = "todo")]
     T(Todo),
 }
-impl Step{
+impl Step {
     pub fn name(&self) -> String {
         match self {
             Step::D(d) => d.name.clone(),
@@ -85,18 +89,21 @@ impl Step{
 pub struct Decision {
     pub name: String,
     pub text: String,
+    pub acquire: Option<String>,
     pub opts: Vec<Opt>,
 }
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Opt{
-    pub text: String, 
+pub struct Opt {
+    pub text: String,
     pub goto: String,
+    pub requires: Option<String>,
 }
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Forwarder {
     pub name: String,
     pub text: String,
     pub goto: String,
+    pub acquire: Option<String>,
 }
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Todo {

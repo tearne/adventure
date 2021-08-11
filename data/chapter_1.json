@@ -63,7 +63,7 @@
                     "goto": "defeat"
                 }
             ],
-            "aquire" : "code"
+            "acquire" : "code - 51 63 142 62 45"
         },{
             "name": "sick",
             "type": "decision",
@@ -97,7 +97,7 @@
             "type": "forwarder",
             "text": "While you are under the bed exploring you find a slip of paper with a code on it: 51 63 142 62 45.  You wonder what it means, then go to explore the upstairs rooms",
             "goto": "upstairs",
-            "aquire" : "code"
+            "acquire" : "code - 51 63 142 62 45"
         },{
             "name": "trampolene",
             "type": "decision",
@@ -112,7 +112,7 @@
                     "goto": "garden"
                 }
             ],
-            "aquire": "key"
+            "acquire": "key"
         },{
             "name": "growl",
             "type": "forwarder",
@@ -124,7 +124,7 @@
             "text": "As you expore the garden you find a secret door in the fence that has a lock on it.",
             "opts": [
                 {
-                    "use": "key",
+                    "requires": "key",
                     "text": "Open the door with the key you found on the trampolene",
                     "goto": "fence"
                 },
@@ -163,12 +163,12 @@
             "text": "You go into another upstairs room and find a secret chest.  It has a keypad on it.",
             "opts": [
                 {
-                    "use": "code",
-                    "text": "You type the code 51 63 142 62 45 on the keypad",
+                    "requires": "code - 51 63 142 62 45",
+                    "text": "Type the code 51 63 142 62 45 on the keypad",
                     "goto": "powerup box"
                 },
                 {
-                    "text": "You press some keys randomly, the box buzzes and shoots out some fireworks which scare you and you run out the window.",
+                    "text": "Press some keys randomly, the box buzzes and shoots out some fireworks which scare you and you run out the window.",
                     "goto": "grass"
                 }
             ]
