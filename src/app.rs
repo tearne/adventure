@@ -1,9 +1,6 @@
 use std::collections::HashSet;
 
-use eframe::{
-    egui::{self, FontDefinitions, FontFamily, Label, TextStyle},
-    epi,
-};
+use eframe::{egui::{self, Checkbox, FontDefinitions, FontFamily, Label, TextStyle}, epi};
 
 use crate::data::{Game, Step};
 
@@ -21,7 +18,7 @@ impl TemplateApp {
             game,
             step_name: String::from("start"),
             inventory: HashSet::new(),
-            show_inventory: false,
+            show_inventory: true,
         }
     }
 }
@@ -43,7 +40,7 @@ impl epi::App for TemplateApp {
             .insert(TextStyle::Body, (FontFamily::Proportional, 20.0));
         fonts
             .family_and_size
-            .insert(TextStyle::Small, (FontFamily::Proportional, 12.0));
+            .insert(TextStyle::Small, (FontFamily::Proportional, 16.0));
 
         ctx.set_fonts(fonts);
 
@@ -55,28 +52,28 @@ impl epi::App for TemplateApp {
         } = self;
 
         if *show_inventory {
-            egui::SidePanel::left("Inventory").resizable(true).show(ctx, |ui| {
+            egui::SidePanel::right("inventory_panel")
+                .min_width(10.0)
+                .resizable(true).show(ctx, |ui| {
                 if inventory.is_empty() {
-                    ui.add(Label::new("[empty]").small());
+                    ui.add(Label::new(" - Empty - ").monospace());
                 } else {
                     for item in inventory.iter() {
-                        ui.add(Label::new(&item).wrap(true).small());
+                        ui.add(Label::new(format!("• {}",&item)).wrap(true).small());
                     }
                 }
              });
         }
 
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.checkbox(show_inventory, "Inventory");
+            let checkbox = Checkbox::new(show_inventory, "Show inventory").text_style(TextStyle::Small);
+            ui.add(checkbox);
 
             for warning in &game.warnings {
                 ui.add(Label::new(&warning).text_color(egui::Color32::RED).wrap(true).small());
             }
 
-            ui.separator();
-
             let step = &game.data[step_name];
-
             match step {
                 Step::D(d) => {
                     ui.add(
@@ -125,6 +122,7 @@ impl epi::App for TemplateApp {
                     ui.add(Label::new(&format!("Not written yet: {}", t.name)).wrap(true));
 
                     if ui.button("Restart").clicked() {
+                        inventory.clear();
                         *step_name = "start".into();
                     }
                 }
