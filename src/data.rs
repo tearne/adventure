@@ -32,20 +32,27 @@ impl RawData {
         }
 
         //TODO yukky!
-        let all_keys = data
+        let targetted_keys_and_steps_they_appear_in: Vec<(String, String)> = data
             .values()
-            .flat_map(|v| match v {
+            .flat_map(|step| match step {
                 Step::D(d) => {
-                    let t = d.opts.iter().map(|o| o.goto.clone()).collect::<Vec<_>>();
-                    t
+                    let vec = d.opts.iter().map(|o| (o.goto.clone(), step.name())).collect::<Vec<_>>();
+                    vec
                 }
-                Step::F(f) => vec![f.goto.clone()],
+                Step::F(f) => vec![(f.goto.clone(), step.name())],
                 _ => Vec::new(),
             })
             .collect::<Vec<_>>();
 
-        for key in all_keys {
-            if !data.contains_key(&key) {
+        for (key, step_name) in targetted_keys_and_steps_they_appear_in {
+            if key.is_empty() {
+                warnings.push(format!(
+                    "Step \"{}\" targets an empty key.",
+                    step_name
+                ));
+                // let todo_step = Step::T(Todo { name: key.clone() });
+                // data.insert(key, todo_step);
+            } else if !data.contains_key(&key) {
                 warnings.push(format!(
                     "Missing stage \"{}\".  Todo inserted in its place.",
                     key

@@ -54,14 +54,14 @@ impl epi::App for TemplateApp {
             show_inventory,
         } = self;
 
-        egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
-            egui::menu::bar(ui, |ui| {
-                ui.checkbox(show_inventory, "Show Inventory");
-            });
-        });
+        // egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
+        //     egui::menu::bar(ui, |ui| {
+        //         ui.checkbox(show_inventory, "Show Inventory");
+        //     });
+        // });
 
         if *show_inventory {
-            egui::Window::new("Inventory").show(ctx, |ui| {
+            egui::Window::new("Inventory").open(show_inventory).collapsible(false).show(ctx, |ui| {
                 if inventory.is_empty() {
                     ui.add(Label::new("[empty]").small());
                 } else {
@@ -73,8 +73,10 @@ impl epi::App for TemplateApp {
         }
 
         egui::CentralPanel::default().show(ctx, |ui| {
+            ui.checkbox(show_inventory, "Inventory");
+
             for warning in &game.warnings {
-                ui.add(Label::new(&warning).wrap(true).small());
+                ui.add(Label::new(&warning).text_color(egui::Color32::RED).wrap(true).small());
             }
 
             ui.separator();
@@ -84,7 +86,7 @@ impl epi::App for TemplateApp {
             match step {
                 Step::D(d) => {
                     ui.add(
-                        Label::new(format!("Stage name: {}", &d.name))
+                        Label::new(format!("You are at stage: {}", &d.name))
                             .wrap(true)
                             .small(),
                     );
