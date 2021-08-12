@@ -6,7 +6,7 @@
         {
             "name": "start",
             "type": "decision",
-            "text": "You are a cat and you are in a bedroom in a house that you don't belong in.  The grown-ups see you.  You can't run out of the door becuase it is close and there isn't a cat flap.  What are you going to do?",
+            "text": "You are a cat and you are in a bedroom in a house that you don't belong in.  The grown-ups see you.  You can't run out of the door becuase it is closed and there isn't a cat flap.  What are you going to do?",
             "opts": [
                 {
                     "text": "Run and hide in the closet.",
@@ -174,18 +174,9 @@
             ]
         },{
             "name": "powerup box",
-            "type": "decision",
-            "text": "The box opnens and you find a set of wings",
-            "opts": [
-                {
-                    "text": "fly in to the garden",
-                    "goto": "garden"
-                },
-                {
-                    "text": "",
-                    "goto": ""
-                }
-            ]
+            "type": "forwarder",
+            "text": "The box opnens and you find a set of wings you want to test your wings so you fly into the garden",
+            "goto": "garden"
         },{
             "name": "garage",
             "type": "todo",
