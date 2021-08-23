@@ -101,7 +101,7 @@
         },{
             "name": "trampolene",
             "type": "decision",
-            "text": "On the trampolene you find a key and wonder what it would open, but you don't think you should go back in the house.  Perhaps it opens something in the garden.",
+            "text": "On the trampolene you find a key and wonder what it would opon so you desid to go and explor the garden.",
             "opts": [
                 {
                     "text": "Go to the garage",
@@ -168,7 +168,7 @@
                     "goto": "powerup box"
                 },
                 {
-                    "text": "Press some keys randomly, the box buzzes and shoots out some fireworks which scare you and you run out the window.",
+                    "text": "Press some keys randomly the box buzzes and shoots out some fireworks which scare you and you run out the window.",
                     "goto": "grass"
                 }
             ]
@@ -179,16 +179,16 @@
             "goto": "garden"
         },{
             "name": "garage",
-            "type": "todo",
-            "text": "",
+            "type": "decision",
+            "text": "you're in the garage and dont know what to do. so you decide to...",
             "opts": [
                 {
-                    "text": "",
-                    "goto": ""
+                    "text": "go out of the garage, into the garden",
+                    "goto": "garden"
                 },
                 {
-                    "text": "",
-                    "goto": ""
+                    "text": "go out of the garage, in the hows and under the bed",
+                    "goto": "bed explore"
                 }
             ]
         }
