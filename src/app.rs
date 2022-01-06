@@ -34,13 +34,13 @@ impl epi::App for TemplateApp {
         // Large button text:
         fonts
             .family_and_size
-            .insert(TextStyle::Button, (FontFamily::Proportional, 20.0));
+            .insert(TextStyle::Button, (FontFamily::Proportional, 40.0));
         fonts
             .family_and_size
-            .insert(TextStyle::Body, (FontFamily::Proportional, 20.0));
+            .insert(TextStyle::Body, (FontFamily::Proportional, 40.0));
         fonts
             .family_and_size
-            .insert(TextStyle::Small, (FontFamily::Proportional, 16.0));
+            .insert(TextStyle::Small, (FontFamily::Proportional, 32.0));
 
         ctx.set_fonts(fonts);
 
