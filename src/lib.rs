@@ -1,5 +1,7 @@
 mod app;
 mod data;
+pub mod editor;
+pub mod inventory;
 
 use crate::data::*;
 use wasm_bindgen::prelude::*;
@@ -26,16 +28,14 @@ macro_rules! log {
 pub async fn start(canvas_id: String) {
     log!("Hello, world!");
 
-    let game_data = load().await;
-    log!("You have {} warnings", game_data.warnings.len());
+    let game_data = load_source().await;
+    // log!("You have {} warnings", game_data.warnings.len());
 
-    let app = app::TemplateApp::new(game_data);
+    let app = app::App::new(game_data);
     eframe::start_web(&canvas_id, Box::new(app)).unwrap();
-
-    // log!("{:?}", data["start"]);
 }
 
-async fn load() -> Game {
+async fn load_source() -> String {
     let mut opts = RequestInit::new();
     opts.method("GET");
     opts.mode(RequestMode::SameOrigin);
@@ -54,5 +54,8 @@ async fn load() -> Game {
 
     let json = JsFuture::from(resp.json().unwrap()).await.expect("a");
 
-    json.into_serde::<RawData>().unwrap().to_game()
+    log!("you got this: {:?}", json);
+
+    let parsed = json.into_serde::<RawData>().unwrap();
+    serde_json::to_string_pretty(&parsed).unwrap()
 }

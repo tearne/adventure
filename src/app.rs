@@ -1,34 +1,38 @@
 use std::collections::HashSet;
 
-use eframe::{egui::{self, Checkbox, FontDefinitions, FontFamily, Label, TextStyle}, epi};
+use eframe::{egui::{self, Checkbox, FontDefinitions, FontFamily, Label, TextStyle, RichText}, epi};
 
-use crate::data::{Game, Step};
+use crate::{data::{Game, Step, RawData}, editor::Editor, inventory::Inventory};
 
-pub struct TemplateApp {
+pub struct App {
     //https://stackoverflow.com/questions/32300132/why-cant-i-store-a-value-and-a-reference-to-that-value-in-the-same-struct
+    editor: Editor,
     game: Game,
     step_name: String,
-    inventory: HashSet<String>,
+    inventory: Inventory,
     show_inventory: bool,
+    show_editor: bool,
 }
 
-impl TemplateApp {
-    pub fn new(game: Game) -> Self {
+impl App {
+    pub fn new(source: String) -> Self {
         Self {
-            game,
+            editor: Editor::new(&source),
+            game: serde_json::from_str::<RawData>(&source).unwrap().to_game(),
             step_name: String::from("start"),
-            inventory: HashSet::new(),
-            show_inventory: true,
+            inventory: Inventory::new(),
+            show_inventory: false,
+            show_editor: true,
         }
     }
 }
 
-impl epi::App for TemplateApp {
+impl epi::App for App {
     fn name(&self) -> &str {
         "egui template"
     }
 
-    fn update(&mut self, ctx: &egui::CtxRef, _frame: &mut epi::Frame<'_>) {
+    fn update(&mut self, ctx: &egui::CtxRef, _frame: &epi::Frame) {
         let mut fonts = FontDefinitions::default();
 
         // Large button text:
@@ -45,32 +49,31 @@ impl epi::App for TemplateApp {
         ctx.set_fonts(fonts);
 
         let Self {
+            editor,
             game,
             step_name,
             inventory,
             show_inventory,
+            show_editor,
         } = self;
 
-        if *show_inventory {
-            egui::SidePanel::right("inventory_panel")
-                .min_width(10.0)
-                .resizable(true).show(ctx, |ui| {
-                if inventory.is_empty() {
-                    ui.add(Label::new(" - Empty - ").monospace());
-                } else {
-                    for item in inventory.iter() {
-                        ui.add(Label::new(format!("• {}",&item)).wrap(true).small());
-                    }
-                }
-             });
+        inventory.show(ctx, show_inventory);
+
+        if let Some(new_game) = editor.show(ctx, show_editor) {
+            *game = new_game;
         }
 
         egui::CentralPanel::default().show(ctx, |ui| {
-            let checkbox = Checkbox::new(show_inventory, "Show inventory").text_style(TextStyle::Small);
+            let checkbox = Checkbox::new(show_inventory, RichText::new("Show inventory").small());
+            ui.add(checkbox);
+
+            let checkbox = Checkbox::new(show_editor, RichText::new("Show editor").small());
             ui.add(checkbox);
 
             for warning in &game.warnings {
-                ui.add(Label::new(&warning).text_color(egui::Color32::RED).wrap(true).small());
+                ui.add(Label::new(
+                    RichText::new(warning).color(egui::Color32::RED).small()
+                ).wrap(true));
             }
 
             let step = &game.data[step_name];
