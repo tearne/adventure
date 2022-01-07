@@ -79,6 +79,8 @@ pub enum Step {
     D(Decision),
     #[serde(rename = "forwarder")]
     F(Forwarder),
+    #[serde(rename = "end")]
+    E(End),
     #[serde(rename = "todo")]
     T(Todo),
 }
@@ -88,6 +90,7 @@ impl Step {
             Step::D(d) => d.name.clone(),
             Step::F(f) => f.name.clone(),
             Step::T(t) => t.name.clone(),
+            Step::E(e) => e.name.clone(),
         }
     }
 }
@@ -115,4 +118,9 @@ pub struct Forwarder {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Todo {
     pub name: String,
+}
+#[derive(Serialize, Deserialize, Debug)]
+pub struct End {
+    pub name: String,
+    pub text: String,
 }

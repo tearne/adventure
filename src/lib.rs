@@ -40,19 +40,19 @@ async fn load_source() -> String {
     opts.method("GET");
     opts.mode(RequestMode::SameOrigin);
 
-    let url = "data/chapter_1.json";
+    let url = "data/example.json";
 
     let request = Request::new_with_str_and_init(&url, &opts).unwrap();
 
     let window = web_sys::window().unwrap();
     let resp_value = JsFuture::from(window.fetch_with_request(&request))
         .await
-        .expect("b");
+        .unwrap();
 
     assert!(resp_value.is_instance_of::<Response>());
-    let resp: Response = resp_value.dyn_into().expect("d");
+    let resp: Response = resp_value.dyn_into().unwrap();
 
-    let json = JsFuture::from(resp.json().unwrap()).await.expect("a");
+    let json = JsFuture::from(resp.json().unwrap()).await.unwrap();
 
     log!("you got this: {:?}", json);
 

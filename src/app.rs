@@ -8,7 +8,8 @@ pub struct App {
     //https://stackoverflow.com/questions/32300132/why-cant-i-store-a-value-and-a-reference-to-that-value-in-the-same-struct
     editor: Editor,
     game: Game,
-    step_name: String,
+    initial_step: String,
+    current_step: String,
     inventory: Inventory,
     show_inventory: bool,
     show_editor: bool,
@@ -16,10 +17,14 @@ pub struct App {
 
 impl App {
     pub fn new(source: String) -> Self {
+        let raw_data = serde_json::from_str::<RawData>(&source).unwrap();
+        let start_step_name = raw_data.start_step.clone();
+
         Self {
             editor: Editor::new(&source),
-            game: serde_json::from_str::<RawData>(&source).unwrap().to_game(),
-            step_name: String::from("start"),
+            game: raw_data.to_game(),
+            initial_step: start_step_name.clone(),
+            current_step: start_step_name.clone(),
             inventory: Inventory::new(),
             show_inventory: false,
             show_editor: true,
@@ -51,7 +56,8 @@ impl epi::App for App {
         let Self {
             editor,
             game,
-            step_name,
+            initial_step,
+            current_step,
             inventory,
             show_inventory,
             show_editor,
@@ -76,7 +82,7 @@ impl epi::App for App {
                 ).wrap(true));
             }
 
-            let step = &game.data[step_name];
+            let step = &game.data.get(current_step).unwrap_or_else(|| panic!("Couldn't find step {}", current_step));
             match step {
                 Step::D(d) => {
                     ui.add(
@@ -101,7 +107,7 @@ impl epi::App for App {
                             opt.requires.iter().for_each(|item| {
                                 let _ = inventory.remove(item);
                             });
-                            *step_name = opt.goto.clone();
+                            *current_step = opt.goto.clone();
                         }
                     }
                 }
@@ -118,7 +124,7 @@ impl epi::App for App {
                         let _ = inventory.insert(item.clone());
                     });
                     if ui.button("Continue").clicked() {
-                        *step_name = f.goto.clone();
+                        *current_step = f.goto.clone();
                     }
                 }
                 Step::T(t) => {
@@ -126,7 +132,21 @@ impl epi::App for App {
 
                     if ui.button("Restart").clicked() {
                         inventory.clear();
-                        *step_name = "start".into();
+                        *current_step = "start".into();
+                    }
+                }
+                Step::E(e) => {
+                    ui.add(
+                        Label::new(format!("Stage name: {}", e.name))
+                            .wrap(true)
+                            .small(),
+                    );
+                    ui.separator();
+                    ui.add(Label::new(&e.text).wrap(true));
+                    
+                    if ui.button("Restart").clicked() {
+                        inventory.clear();
+                        *current_step = initial_step.clone();
                     }
                 }
             };

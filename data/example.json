@@ -1,0 +1,42 @@
+{
+    "title": "Adventure Game",
+    "author": "TRAIN",
+    "start_step": "chapter_one",
+    "steps" : [
+        {
+            "name": "chapter_one",
+            "type": "decision",
+            "text": "You in the zoo playground, eating ice cream from a cone.  A melted drop falls to the floor.  You look down and notice a small creature eat it, then skuttle off.",
+            "opts": [
+                {
+                    "text": "Carry on eating the ice cream.",
+                    "goto": "more_ice_cream"
+                },
+                {
+                    "text": "Follow the creature",
+                    "goto": "follow"
+                }
+            ]
+        },
+        {
+            "name": "more_ice_cream",
+            "type": "end",
+            "text": "It's delicious, and you even find a big blob of chocolate at the bottom of the cone."
+        },
+        {
+            "name": "follow",
+            "type": "decision",
+            "text": "The creature burrows under some of the play equipment, through the soft wood chippings.  You go closer and notice a small hole.  Brushing aside the wood chip you find a small hatch in the ground.  You decide to...",
+            "opts": [
+                {
+                    "text": "cover it back up so nobody else notices and you can call for reinforcements.",
+                    "goto": "reinforcements"
+                },
+                {
+                    "text": "open the hatch to peek inside.",
+                    "goto": "open_hatch"
+                }
+            ]
+        }
+    ]
+}
