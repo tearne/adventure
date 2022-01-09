@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use eframe::{egui::{self, Checkbox, FontDefinitions, FontFamily, Label, TextStyle, RichText}, epi};
 
 use crate::{data::{Game, Step, RawData}, editor::Editor, inventory::Inventory};
@@ -13,6 +11,7 @@ pub struct App {
     inventory: Inventory,
     show_inventory: bool,
     show_editor: bool,
+    show_logs: bool,
 }
 
 impl App {
@@ -27,7 +26,8 @@ impl App {
             current_step: start_step_name.clone(),
             inventory: Inventory::new(),
             show_inventory: false,
-            show_editor: true,
+            show_editor: false,
+            show_logs: false,
         }
     }
 }
@@ -61,6 +61,7 @@ impl epi::App for App {
             inventory,
             show_inventory,
             show_editor,
+            show_logs,
         } = self;
 
         inventory.show(ctx, show_inventory);
@@ -69,18 +70,20 @@ impl epi::App for App {
             *game = new_game;
         }
 
+        game.logs.show(ctx, show_logs);
+
         egui::CentralPanel::default().show(ctx, |ui| {
-            let checkbox = Checkbox::new(show_inventory, RichText::new("Show inventory").small());
-            ui.add(checkbox);
-
-            let checkbox = Checkbox::new(show_editor, RichText::new("Show editor").small());
-            ui.add(checkbox);
-
-            for warning in &game.warnings {
-                ui.add(Label::new(
-                    RichText::new(warning).color(egui::Color32::RED).small()
-                ).wrap(true));
-            }
+            ui.horizontal_wrapped(|ui| {
+                let checkbox = Checkbox::new(show_inventory, RichText::new("Show inventory").small());
+                ui.add(checkbox);
+                ui.separator();
+                let checkbox = Checkbox::new(show_editor, RichText::new("Show editor").small());
+                ui.add(checkbox);
+                ui.separator();
+                let checkbox = Checkbox::new(show_logs, RichText::new("Show logs").small());
+                ui.add(checkbox);
+            });
+            ui.separator();
 
             let step = &game.data.get(current_step).unwrap_or_else(|| panic!("Couldn't find step {}", current_step));
             match step {
@@ -132,7 +135,7 @@ impl epi::App for App {
 
                     if ui.button("Restart").clicked() {
                         inventory.clear();
-                        *current_step = "start".into();
+                        *current_step = initial_step.clone();
                     }
                 }
                 Step::E(e) => {

@@ -2,12 +2,15 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
+use crate::log::Logs;
+
+#[derive(Default)]
 pub struct Game {
     pub title: String,
     pub author: String,
     pub data: HashMap<String, Step>,
     pub start_step: String,
-    pub warnings: Vec<String>,
+    pub logs: Logs,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -67,7 +70,7 @@ impl RawData {
             author: self.author,
             data,
             start_step: self.start_step,
-            warnings,
+            logs: Logs::new(warnings),
         }
     }
 }

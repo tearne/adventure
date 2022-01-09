@@ -2,6 +2,7 @@ mod app;
 mod data;
 pub mod editor;
 pub mod inventory;
+pub mod log;
 
 use crate::data::*;
 use wasm_bindgen::prelude::*;
@@ -11,6 +12,7 @@ use web_sys::Request;
 use web_sys::RequestInit;
 use web_sys::RequestMode;
 use web_sys::Response;
+use anyhow::{Context, Result};
 
 #[wasm_bindgen(start)]
 pub fn main() {
@@ -26,16 +28,22 @@ macro_rules! log {
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
 pub async fn start(canvas_id: String) {
-    log!("Hello, world!");
+    use crate::app::App;
 
     let game_data = load_source().await;
-    // log!("You have {} warnings", game_data.warnings.len());
-
-    let app = app::App::new(game_data);
+    let app = match game_data {
+        Ok(d) => 
+            App::new(d),
+        Err(_) => {
+            log!("Failed to load game data");
+            App::new(Default::default())
+        },
+    };
+    
     eframe::start_web(&canvas_id, Box::new(app)).unwrap();
 }
 
-async fn load_source() -> String {
+async fn load_source() -> anyhow::Result<String> {
     let mut opts = RequestInit::new();
     opts.method("GET");
     opts.mode(RequestMode::SameOrigin);
@@ -54,8 +62,9 @@ async fn load_source() -> String {
 
     let json = JsFuture::from(resp.json().unwrap()).await.unwrap();
 
-    log!("you got this: {:?}", json);
+    // log!("Loaded this: {:?}", json);
 
-    let parsed = json.into_serde::<RawData>().unwrap();
-    serde_json::to_string_pretty(&parsed).unwrap()
+    let parsed = json.into_serde::<RawData>()?;
+    let string = serde_json::to_string_pretty(&parsed)?;
+    Ok(string)
 }

@@ -6,7 +6,7 @@
         {
             "name": "chapter_one",
             "type": "decision",
-            "text": "You in the zoo playground, eating ice cream from a cone.  A melted drop falls to the floor.  You look down and notice a small creature eat it, then skuttle off.",
+            "text": "You are in the zoo playground, eating ice cream from a cone.  A drop melts and falls to the ground.  You look down and notice a small creature eat it then skuttle off.",
             "opts": [
                 {
                     "text": "Carry on eating the ice cream.",
@@ -26,11 +26,11 @@
         {
             "name": "follow",
             "type": "decision",
-            "text": "The creature burrows under some of the play equipment, through the soft wood chippings.  You go closer and notice a small hole.  Brushing aside the wood chip you find a small hatch in the ground.  You decide to...",
+            "text": "You follow the creature and notice it looks strangely shiny.  It burrows under some of the play equipment, through the soft wood chippings.  You go closer and notice a small hole.  Brushing aside the wood chip you find a small hatch in the ground.  You decide to...",
             "opts": [
                 {
-                    "text": "cover it back up so nobody else notices and you can call for reinforcements.",
-                    "goto": "reinforcements"
+                    "text": "cover it back up so nobody notices and call for backup.",
+                    "goto": "backup"
                 },
                 {
                     "text": "open the hatch to peek inside.",
