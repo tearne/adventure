@@ -26,14 +26,14 @@
         {
             "name": "follow",
             "type": "decision",
-            "text": "You follow the creature and notice it looks strangely shiny.  It burrows under some of the play equipment, through the soft wood chippings.  You go closer and notice a small hole.  Brushing aside the wood chip you find a small hatch in the ground.  You decide to...",
+            "text": "You follow the creature and notice it looks strange and shiny.  It burrows under the swings, through the soft wood chips.  You go closer and notice a small hole.  Brushing the wood chips aside you find a small hatch in the ground.  What do you do?",
             "opts": [
                 {
-                    "text": "cover it back up so nobody notices and call for backup.",
+                    "text": "Cover it back up so nobody notices and call for backup.",
                     "goto": "backup"
                 },
                 {
-                    "text": "open the hatch to peek inside.",
+                    "text": "Open the hatch to peek inside.",
                     "goto": "open_hatch"
                 }
             ]

@@ -1,6 +1,6 @@
 use eframe::egui;
 
-use crate::data::{RawData, Game};
+use crate::{data::RawData, game::Game};
 
 pub struct Editor {
     text: String,
@@ -19,7 +19,7 @@ impl Editor {
             .default_height(300.0)
             .show(ctx, |ui| self.ui(ui));
 
-        result.map(|i|i.inner).flatten().flatten()
+        result.map(|i| i.inner).flatten().flatten()
     }
 
     fn ui(&mut self, ui: &mut egui::Ui) -> Option<Game> {
@@ -32,12 +32,16 @@ impl Editor {
                     .code_editor()
                     .desired_rows(10)
                     .lock_focus(true)
-                    .desired_width(f32::INFINITY)
+                    .desired_width(f32::INFINITY),
             );
         });
 
         if clicked {
-            Some(serde_json::from_str::<RawData>(&self.text).unwrap().to_game())
+            Some(
+                serde_json::from_str::<RawData>(&self.text)
+                    .unwrap()
+                    .to_game(),
+            )
         } else {
             None
         }

@@ -1,6 +1,7 @@
 mod app;
 mod data;
 pub mod editor;
+pub mod game;
 pub mod inventory;
 pub mod log;
 
@@ -12,7 +13,6 @@ use web_sys::Request;
 use web_sys::RequestInit;
 use web_sys::RequestMode;
 use web_sys::Response;
-use anyhow::{Context, Result};
 
 #[wasm_bindgen(start)]
 pub fn main() {
@@ -32,14 +32,13 @@ pub async fn start(canvas_id: String) {
 
     let game_data = load_source().await;
     let app = match game_data {
-        Ok(d) => 
-            App::new(d),
+        Ok(d) => App::new(d),
         Err(_) => {
             log!("Failed to load game data");
             App::new(Default::default())
-        },
+        }
     };
-    
+
     eframe::start_web(&canvas_id, Box::new(app)).unwrap();
 }
 

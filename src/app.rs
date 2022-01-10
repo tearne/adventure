@@ -1,29 +1,31 @@
-use eframe::{egui::{self, Checkbox, FontDefinitions, FontFamily, Label, TextStyle, RichText}, epi};
+use eframe::{
+    egui::{self, Checkbox, FontDefinitions, FontFamily, RichText, TextStyle},
+    epi,
+};
 
-use crate::{data::{Game, Step, RawData}, editor::Editor, inventory::Inventory};
+use crate::{data::RawData, editor::Editor, game::Game, inventory::Inventory};
 
 pub struct App {
     //https://stackoverflow.com/questions/32300132/why-cant-i-store-a-value-and-a-reference-to-that-value-in-the-same-struct
     editor: Editor,
     game: Game,
-    initial_step: String,
-    current_step: String,
     inventory: Inventory,
     show_inventory: bool,
     show_editor: bool,
     show_logs: bool,
+    current_step_name: String,
 }
 
 impl App {
     pub fn new(source: String) -> Self {
         let raw_data = serde_json::from_str::<RawData>(&source).unwrap();
-        let start_step_name = raw_data.start_step.clone();
+        let game = raw_data.to_game();
+        let current_step_name = game.start_step_name.clone();
 
         Self {
             editor: Editor::new(&source),
-            game: raw_data.to_game(),
-            initial_step: start_step_name.clone(),
-            current_step: start_step_name.clone(),
+            game,
+            current_step_name,
             inventory: Inventory::new(),
             show_inventory: false,
             show_editor: false,
@@ -56,12 +58,11 @@ impl epi::App for App {
         let Self {
             editor,
             game,
-            initial_step,
-            current_step,
             inventory,
             show_inventory,
             show_editor,
             show_logs,
+            current_step_name,
         } = self;
 
         inventory.show(ctx, show_inventory);
@@ -74,7 +75,8 @@ impl epi::App for App {
 
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.horizontal_wrapped(|ui| {
-                let checkbox = Checkbox::new(show_inventory, RichText::new("Show inventory").small());
+                let checkbox =
+                    Checkbox::new(show_inventory, RichText::new("Show inventory").small());
                 ui.add(checkbox);
                 ui.separator();
                 let checkbox = Checkbox::new(show_editor, RichText::new("Show editor").small());
@@ -85,74 +87,7 @@ impl epi::App for App {
             });
             ui.separator();
 
-            let step = &game.data.get(current_step).unwrap_or_else(|| panic!("Couldn't find step {}", current_step));
-            match step {
-                Step::D(d) => {
-                    ui.add(
-                        Label::new(format!("You are at stage: {}", &d.name))
-                            .wrap(true)
-                            .small(),
-                    );
-                    ui.separator();
-                    ui.add(Label::new(&d.text).wrap(true));
-                    ui.separator();
-                    d.acquire.iter().for_each(|item| {
-                        let _ = inventory.insert(item.clone());
-                    });
-                    for opt in d.opts.iter() {
-                        let is_available = opt
-                            .requires
-                            .as_ref()
-                            .map(|item| inventory.contains(item))
-                            .unwrap_or(true);
-
-                        if is_available && ui.button(&opt.text).clicked() {
-                            opt.requires.iter().for_each(|item| {
-                                let _ = inventory.remove(item);
-                            });
-                            *current_step = opt.goto.clone();
-                        }
-                    }
-                }
-                Step::F(f) => {
-                    ui.add(
-                        Label::new(format!("Stage name: {}", &f.name))
-                            .wrap(true)
-                            .small(),
-                    );
-                    ui.separator();
-                    ui.add(Label::new(&f.text).wrap(true));
-                    ui.separator();
-                    f.acquire.iter().for_each(|item| {
-                        let _ = inventory.insert(item.clone());
-                    });
-                    if ui.button("Continue").clicked() {
-                        *current_step = f.goto.clone();
-                    }
-                }
-                Step::T(t) => {
-                    ui.add(Label::new(&format!("Not written yet: {}", t.name)).wrap(true));
-
-                    if ui.button("Restart").clicked() {
-                        inventory.clear();
-                        *current_step = initial_step.clone();
-                    }
-                }
-                Step::E(e) => {
-                    ui.add(
-                        Label::new(format!("Stage name: {}", e.name))
-                            .wrap(true)
-                            .small(),
-                    );
-                    ui.separator();
-                    ui.add(Label::new(&e.text).wrap(true));
-                    
-                    if ui.button("Restart").clicked() {
-                        inventory.clear();
-                        *current_step = initial_step.clone();
-                    }
-                }
-            };
+            game.show_and_update(ui, current_step_name, inventory);
         });
     }
 }

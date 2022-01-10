@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use eframe::egui::{self, Label, RichText};
 
 pub struct Inventory {
-    items: HashSet<String>
+    items: HashSet<String>,
 }
 
 impl Inventory {
@@ -38,12 +38,10 @@ impl Inventory {
 
     pub fn ui(&mut self, ui: &mut egui::Ui) {
         if self.items.is_empty() {
-            ui.add(Label::new(
-                RichText::new(" - Empty - ").monospace()
-            ));
+            ui.add(Label::new(RichText::new(" - Empty - ").monospace()));
         } else {
             for item in self.items.iter() {
-                ui.add(Label::new(format!("• {}",&item)).wrap(true).small());
+                ui.add(Label::new(format!("• {}", &item)).wrap(true).small());
             }
         };
     }

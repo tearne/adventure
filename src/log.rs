@@ -2,14 +2,12 @@ use eframe::egui::{self, Label, RichText};
 
 #[derive(Default)]
 pub struct Logs {
-    items: Vec<String>
+    items: Vec<String>,
 }
 
 impl Logs {
     pub fn new(items: Vec<String>) -> Self {
-        Self {
-            items,
-        }
+        Self { items }
     }
 
     pub fn show(&mut self, ctx: &egui::CtxRef, is_open: &mut bool) {
@@ -21,14 +19,17 @@ impl Logs {
 
     pub fn ui(&mut self, ui: &mut egui::Ui) {
         if self.items.is_empty() {
-            ui.add(Label::new(
-                RichText::new(" - Empty - ").monospace()
-            ));
+            ui.add(Label::new(RichText::new(" - Empty - ").monospace()));
         } else {
             for item in self.items.iter() {
-                ui.add(Label::new(
-                    RichText::new(format!("• {}",&item)).color(egui::Color32::RED).small()
-                ).wrap(true));
+                ui.add(
+                    Label::new(
+                        RichText::new(format!("• {}", &item))
+                            .color(egui::Color32::RED)
+                            .small(),
+                    )
+                    .wrap(true),
+                );
             }
         }
     }

@@ -1,17 +1,10 @@
 use std::collections::HashMap;
 
+use anyhow::{Context, Result};
+use eframe::egui::{Label, Ui};
 use serde::{Deserialize, Serialize};
 
-use crate::log::Logs;
-
-#[derive(Default)]
-pub struct Game {
-    pub title: String,
-    pub author: String,
-    pub data: HashMap<String, Step>,
-    pub start_step: String,
-    pub logs: Logs,
-}
+use crate::{game::Game, inventory::Inventory, log::Logs};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RawData {
@@ -39,7 +32,11 @@ impl RawData {
             .values()
             .flat_map(|step| match step {
                 Step::D(d) => {
-                    let vec = d.opts.iter().map(|o| (o.goto.clone(), step.name())).collect::<Vec<_>>();
+                    let vec = d
+                        .opts
+                        .iter()
+                        .map(|o| (o.goto.clone(), step.name()))
+                        .collect::<Vec<_>>();
                     vec
                 }
                 Step::F(f) => vec![(f.goto.clone(), step.name())],
@@ -49,10 +46,7 @@ impl RawData {
 
         for (key, step_name) in targetted_keys_and_steps_they_appear_in {
             if key.is_empty() {
-                warnings.push(format!(
-                    "Step \"{}\" targets an empty key.",
-                    step_name
-                ));
+                warnings.push(format!("Step \"{}\" targets an empty key.", step_name));
                 // let todo_step = Step::T(Todo { name: key.clone() });
                 // data.insert(key, todo_step);
             } else if !data.contains_key(&key) {
@@ -69,7 +63,8 @@ impl RawData {
             title: self.title,
             author: self.author,
             data,
-            start_step: self.start_step,
+            start_step_name: self.start_step.clone(),
+            // current_step_name: self.start_step.clone(),
             logs: Logs::new(warnings),
         }
     }
@@ -96,6 +91,9 @@ impl Step {
             Step::E(e) => e.name.clone(),
         }
     }
+    // pub fn show(&self, ui: &mut Ui, game: &mut Game, inventory: &mut Inventory) {
+
+    // }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
