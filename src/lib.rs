@@ -49,7 +49,7 @@ async fn load_source() -> anyhow::Result<String> {
 
     let url = "data/example.json";
 
-    let request = Request::new_with_str_and_init(&url, &opts).unwrap();
+    let request = Request::new_with_str_and_init(url, &opts).unwrap();
 
     let window = web_sys::window().unwrap();
     let resp_value = JsFuture::from(window.fetch_with_request(&request))

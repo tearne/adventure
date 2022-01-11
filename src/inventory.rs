@@ -41,7 +41,9 @@ impl Inventory {
             ui.add(Label::new(RichText::new(" - Empty - ").monospace()));
         } else {
             for item in self.items.iter() {
-                ui.add(Label::new(format!("• {}", &item)).wrap(true).small());
+                ui.add(Label::new(
+                    RichText::new(format!("• {}", &item)).small())
+                );
             }
         };
     }

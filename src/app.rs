@@ -51,7 +51,7 @@ impl epi::App for App {
             .insert(TextStyle::Body, (FontFamily::Proportional, 40.0));
         fonts
             .family_and_size
-            .insert(TextStyle::Small, (FontFamily::Proportional, 32.0));
+            .insert(TextStyle::Small, (FontFamily::Proportional, 28.0));
 
         ctx.set_fonts(fonts);
 

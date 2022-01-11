@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use anyhow::{Context, Result};
-use eframe::egui::{Label, Ui};
+use eframe::egui::{Label, Ui, RichText};
 
 use crate::{data::Step, inventory::Inventory, log::Logs};
 
@@ -20,12 +20,18 @@ impl Game {
         current_step_name: &mut String,
         inventory: &mut Inventory,
     ) {
-        match self.current_step(current_step_name).unwrap() {
-            Step::D(d) => {
+        match self.current_step(current_step_name).ok() {
+            None => {
                 ui.add(
-                    Label::new(format!("You are at stage: {}", &d.name))
+                    Label::new(RichText::new(format!("Failed to load step {}", &current_step_name)).strong())
                         .wrap(true)
-                        .small(),
+                );
+                ui.separator();
+            },
+            Some(Step::D(d)) => {
+                ui.add(
+                    Label::new(RichText::new(format!("You are at stage: {}", &d.name)).small())
+                        .wrap(true)
                 );
                 ui.separator();
                 ui.add(Label::new(&d.text).wrap(true));
@@ -48,11 +54,10 @@ impl Game {
                     }
                 }
             }
-            Step::F(f) => {
+            Some(Step::F(f)) => {
                 ui.add(
                     Label::new(format!("Stage name: {}", &f.name))
                         .wrap(true)
-                        .small(),
                 );
                 ui.separator();
                 ui.add(Label::new(&f.text).wrap(true));
@@ -64,7 +69,7 @@ impl Game {
                     *current_step_name = f.goto.clone();
                 }
             }
-            Step::T(t) => {
+            Some(Step::T(t)) => {
                 ui.add(Label::new(&format!("Not written yet: {}", t.name)).wrap(true));
 
                 if ui.button("Restart").clicked() {
@@ -72,11 +77,10 @@ impl Game {
                     *current_step_name = self.start_step_name.clone();
                 }
             }
-            Step::E(e) => {
+            Some(Step::E(e)) => {
                 ui.add(
                     Label::new(format!("Stage name: {}", e.name))
                         .wrap(true)
-                        .small(),
                 );
                 ui.separator();
                 ui.add(Label::new(&e.text).wrap(true));

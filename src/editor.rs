@@ -23,7 +23,7 @@ impl Editor {
     }
 
     fn ui(&mut self, ui: &mut egui::Ui) -> Option<Game> {
-        let clicked = ui.add(egui::Button::new("Press me when done")).clicked();
+        let clicked = ui.add(egui::Button::new("Reload Game")).clicked();
 
         egui::ScrollArea::vertical().show(ui, |ui| {
             ui.add(
@@ -37,11 +37,9 @@ impl Editor {
         });
 
         if clicked {
-            Some(
-                serde_json::from_str::<RawData>(&self.text)
-                    .unwrap()
-                    .to_game(),
-            )
+            serde_json::from_str::<RawData>(&self.text)
+                .ok()
+                .map(|d|d.to_game())
         } else {
             None
         }
