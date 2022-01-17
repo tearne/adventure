@@ -6,11 +6,11 @@
         {
             "name": "chapter_one",
             "type": "decision",
-            "text": "You are in the zoo playground, eating ice cream from a cone.  A drop melts and falls to the ground.  You look down and notice a small creature eat it then skuttle off.",
+            "text": "You are at the zoo, eating ice cream from a cone.  A drop melts and falls to the ground.  You look down and notice a small creature eat it then skuttle off.",
             "opts": [
                 {
                     "text": "Carry on eating the ice cream.",
-                    "goto": "more_ice_cream"
+                    "goto": "ice_cream"
                 },
                 {
                     "text": "Follow the creature",
@@ -19,22 +19,26 @@
             ]
         },
         {
-            "name": "more_ice_cream",
+            "name": "ice_cream",
             "type": "end",
             "text": "It's delicious, and you even find a big blob of chocolate at the bottom of the cone."
         },
         {
             "name": "follow",
             "type": "decision",
-            "text": "You follow the creature and notice it looks strange and shiny.  It burrows under the swings, through the soft wood chips.  You go closer and notice a small hole.  Brushing the wood chips aside you find a small hatch in the ground.  What do you do?",
+            "text": "You follow the creature and notice it looks strange and shiny.  It burrows under a hedge.  You go closer and notice a small hole.  Brushing the soil aside you find a small hatch in the ground.  What do you do?",
             "opts": [
                 {
-                    "text": "Cover it back up so nobody notices and call for backup.",
+                    "text": "Cover it up and call team TRAIN for backup.",
                     "goto": "backup"
                 },
                 {
-                    "text": "Open the hatch to peek inside.",
+                    "text": "Open the hatch.",
                     "goto": "open_hatch"
+                },
+                {
+                    "text": "Explore the surrounding area.",
+                    "goto": "explore"
                 }
             ]
         }
