@@ -27,10 +27,10 @@ macro_rules! log {
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
-pub async fn start(canvas_id: String) {
+pub async fn start(canvas_id: String, data_file: String) {
     use crate::app::App;
 
-    let game_data = load_source().await;
+    let game_data = load_source(data_file).await;
     let app = match game_data {
         Ok(d) => App::new(d),
         Err(_) => {
@@ -42,14 +42,14 @@ pub async fn start(canvas_id: String) {
     eframe::start_web(&canvas_id, Box::new(app)).unwrap();
 }
 
-async fn load_source() -> anyhow::Result<String> {
+async fn load_source(data_file: String) -> anyhow::Result<String> {
     let mut opts = RequestInit::new();
     opts.method("GET");
     opts.mode(RequestMode::SameOrigin);
 
-    let url = "data/example.json";
+    let url = format!("data/{}", data_file);
 
-    let request = Request::new_with_str_and_init(url, &opts).unwrap();
+    let request = Request::new_with_str_and_init(&url, &opts).unwrap();
 
     let window = web_sys::window().unwrap();
     let resp_value = JsFuture::from(window.fetch_with_request(&request))
