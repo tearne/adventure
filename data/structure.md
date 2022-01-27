@@ -54,5 +54,5 @@ The `opts` bits specify the options, and `goto` points to the next blocks `name`
     "name": "...",
     "type": "end",
     "text": "..."
-},
+}
 ```
