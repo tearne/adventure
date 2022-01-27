@@ -1,10 +1,8 @@
 use std::collections::HashMap;
 
-use anyhow::{Context, Result};
-use eframe::egui::{Label, Ui};
 use serde::{Deserialize, Serialize};
 
-use crate::{game::Game, inventory::Inventory, log::Logs};
+use crate::{game::Game,log::Logs};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RawData {

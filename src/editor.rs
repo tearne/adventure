@@ -32,7 +32,7 @@ impl Editor {
                     .code_editor()
                     .desired_rows(10)
                     .lock_focus(true)
-                    .desired_width(f32::INFINITY),
+                    .desired_width(f32::INFINITY)
             );
         });
 

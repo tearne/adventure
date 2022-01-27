@@ -69,6 +69,7 @@ impl epi::App for App {
 
         if let Some(new_game) = editor.show(ctx, show_editor) {
             *game = new_game;
+            *current_step_name = game.start_step_name.clone();
         }
 
         game.logs.show(ctx, show_logs);
