@@ -1,5 +1,5 @@
 use eframe::{
-    egui::{self, Checkbox, FontDefinitions, FontFamily, RichText, TextStyle},
+    egui::{self, Checkbox, FontDefinitions, FontFamily, RichText, TextStyle, Window, TextEdit, Ui, Color32},
     epi,
 };
 
@@ -14,6 +14,7 @@ pub struct App {
     show_editor: bool,
     show_logs: bool,
     current_step_name: String,
+    some_text: String,
 }
 
 impl App {
@@ -30,6 +31,7 @@ impl App {
             show_inventory: false,
             show_editor: false,
             show_logs: false,
+            some_text: "hello world".into(),
         }
     }
 }
@@ -42,16 +44,16 @@ impl epi::App for App {
     fn update(&mut self, ctx: &egui::CtxRef, _frame: &epi::Frame) {
         let mut fonts = FontDefinitions::default();
 
-        // Large button text:
+        let size_factor = 1.0;
         fonts
             .family_and_size
-            .insert(TextStyle::Button, (FontFamily::Proportional, 40.0));
+            .insert(TextStyle::Button, (FontFamily::Proportional, size_factor * 20.0));
         fonts
             .family_and_size
-            .insert(TextStyle::Body, (FontFamily::Proportional, 40.0));
+            .insert(TextStyle::Body, (FontFamily::Proportional, size_factor * 20.0));
         fonts
             .family_and_size
-            .insert(TextStyle::Small, (FontFamily::Proportional, 28.0));
+            .insert(TextStyle::Small, (FontFamily::Proportional, size_factor * 14.0));
 
         ctx.set_fonts(fonts);
 
@@ -63,6 +65,7 @@ impl epi::App for App {
             show_editor,
             show_logs,
             current_step_name,
+            some_text,
         } = self;
 
         inventory.show(ctx, show_inventory);
@@ -73,6 +76,19 @@ impl epi::App for App {
         }
 
         game.logs.show(ctx, show_logs);
+
+        let mut layouter = |ui: &Ui, string: &str, wrap_width: f32| {
+            ui.fonts().layout(string.into(), TextStyle::Monospace, Color32::DARK_BLUE, wrap_width)
+        };
+        Window::new("↔ resizable with TextEdit")
+            .open(&mut true)
+            .vscroll(false)
+            .resizable(true)
+            .default_height(300.0)
+            .show(ctx, |ui| {
+                ui.label("Shows how you can fill an area with a widget.");
+                ui.add_sized(ui.available_size(), TextEdit::multiline(some_text).layouter(&mut layouter));
+            });
 
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.horizontal_wrapped(|ui| {
